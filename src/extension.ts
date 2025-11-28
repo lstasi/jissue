@@ -17,7 +17,8 @@ export function activate(context: vscode.ExtensionContext): void {
 
 /**
  * This method is called when the extension is deactivated.
+ * Dispose of disposables, timers, or other resources here if needed.
  */
 export function deactivate(): void {
-    // Clean up resources if needed
+    // No cleanup needed currently
 }
