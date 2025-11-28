@@ -26,8 +26,10 @@ jobs:
         run: |
           if [ -f package-lock.json ]; then
             echo "cache=npm" >> $GITHUB_OUTPUT
+            echo "install-cmd=ci" >> $GITHUB_OUTPUT
           else
             echo "cache=" >> $GITHUB_OUTPUT
+            echo "install-cmd=install" >> $GITHUB_OUTPUT
           fi
 
       - name: Setup Node.js ${{ matrix.node-version }}
@@ -37,7 +39,7 @@ jobs:
           cache: ${{ steps.check-lock.outputs.cache }}
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ${{ steps.check-lock.outputs.install-cmd }}
 
       - name: Lint
         run: npm run lint

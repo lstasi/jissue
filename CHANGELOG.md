@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - CI workflow now conditionally enables npm caching only when package-lock.json exists, preventing build failures on PRs that don't have a lock file
+- CI workflow uses `npm install` instead of `npm ci` when package-lock.json is missing
 
 ### Added
 - Initial project setup
