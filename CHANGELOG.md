@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CHANGELOG for version tracking
 - GitHub Actions CI/CD workflow
 - Dependabot configuration for dependency updates
+- TypeScript configuration (`tsconfig.json`)
+- ESLint configuration (`.eslintrc.json`)
+- VS Code extension project structure with `src/` directory
+- Main extension entry point (`src/extension.ts`)
+- Test infrastructure with Mocha (`src/test/`)
+- Hello World command for testing extension activation
 
 ## [0.1.0] - 2024-01-01
 
