@@ -21,11 +21,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Check for lock file
+        id: check-lock
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "cache=npm" >> $GITHUB_OUTPUT
+          else
+            echo "cache=" >> $GITHUB_OUTPUT
+          fi
+
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: ${{ steps.check-lock.outputs.cache }}
 
       - name: Install dependencies
         run: npm ci
