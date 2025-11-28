@@ -1,0 +1,58 @@
+{
+  "name": "jissue",
+  "displayName": "Jissue",
+  "description": "View and manage Jira issues directly from VS Code",
+  "version": "0.1.0",
+  "publisher": "lstasi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lstasi/Jissue"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [],
+    "configuration": {
+      "title": "Jissue",
+      "properties": {
+        "jissue.jiraUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Your Jira instance URL (e.g., https://your-domain.atlassian.net)"
+        },
+        "jissue.jiraUsername": {
+          "type": "string",
+          "default": "",
+          "description": "Your Jira username or email"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "@vscode/test-electron": "^2.3.8",
+    "eslint": "^8.55.0",
+    "glob": "^10.3.10",
+    "mocha": "^10.2.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {}
+}
