@@ -2,10 +2,10 @@
 
 ## Phase 1: Project Foundation
 
-- [ ] Set up VSCode extension project structure
-- [ ] Configure TypeScript and ESLint
-- [ ] Set up testing framework (Mocha/Jest)
-- [ ] Create extension manifest (package.json with VS Code extension fields)
+- [x] Set up VSCode extension project structure
+- [x] Configure TypeScript and ESLint
+- [x] Set up testing framework (Mocha/Jest)
+- [x] Create extension manifest (package.json with VS Code extension fields)
 
 ## Phase 2: Authentication
 

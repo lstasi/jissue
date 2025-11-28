@@ -17,7 +17,13 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [],
+    "commands": [
+      {
+        "command": "jissue.helloWorld",
+        "title": "Hello World",
+        "category": "Jissue"
+      }
+    ],
     "configuration": {
       "title": "Jissue",
       "properties": {
