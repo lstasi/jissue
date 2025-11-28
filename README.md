@@ -36,8 +36,7 @@ Configure the extension in your VS Code settings:
 ```json
 {
   "jissue.jiraUrl": "https://your-domain.atlassian.net",
-  "jissue.jiraUsername": "your-email@example.com",
-  "jissue.jiraToken": "your-api-token"
+  "jissue.jiraUsername": "your-email@example.com"
 }
 ```
 
@@ -46,7 +45,7 @@ Configure the extension in your VS Code settings:
 1. Go to [Atlassian Account Settings](https://id.atlassian.com/manage-profile/security/api-tokens)
 2. Click "Create API token"
 3. Give your token a label and copy the generated token
-4. Use this token in the extension settings
+4. When prompted by the extension, enter your API token (stored securely via VS Code's SecretStorage API)
 
 ## Usage
 
