@@ -75,6 +75,7 @@ export class JiraIssueTreeDataProvider implements vscode.TreeDataProvider<JiraIs
     readonly onDidChangeTreeData: vscode.Event<JiraIssueTreeItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
     private issues: JiraIssue[] = [];
+    private isLoading = false;
 
     constructor(private authManager: JiraAuthManager) {}
 
@@ -101,8 +102,8 @@ export class JiraIssueTreeDataProvider implements vscode.TreeDataProvider<JiraIs
             return [];
         }
 
-        // Load issues if not already loaded
-        if (this.issues.length === 0) {
+        // Load issues on first access
+        if (this.issues.length === 0 && !this.isLoading) {
             await this.loadIssues();
         }
 
@@ -115,6 +116,11 @@ export class JiraIssueTreeDataProvider implements vscode.TreeDataProvider<JiraIs
      * Load issues from Jira
      */
     private async loadIssues(): Promise<void> {
+        if (this.isLoading) {
+            return;
+        }
+
+        this.isLoading = true;
         try {
             const config = this.authManager.getJiraConfig();
             if (!config) {
@@ -132,27 +138,44 @@ export class JiraIssueTreeDataProvider implements vscode.TreeDataProvider<JiraIs
             const jql = 'assignee = currentUser() AND status != Done ORDER BY updated DESC';
             const url = `${config.jiraUrl}/rest/api/3/search?jql=${encodeURIComponent(jql)}&maxResults=50`;
 
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: headers
-            });
+            // Create an AbortController for timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
-            if (!response.ok) {
-                throw new Error(`Failed to fetch issues: ${response.status} ${response.statusText}`);
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: headers,
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch issues: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json() as JiraApiResponse;
+                this.issues = data.issues.map((issue: JiraApiIssue) => ({
+                    key: issue.key,
+                    summary: issue.fields.summary,
+                    status: issue.fields.status.name,
+                    assignee: issue.fields.assignee?.displayName,
+                    issueType: issue.fields.issuetype.name
+                }));
+            } catch (fetchError) {
+                clearTimeout(timeoutId);
+                if (fetchError instanceof Error && fetchError.name === 'AbortError') {
+                    throw new Error('Request timed out after 30 seconds');
+                }
+                throw fetchError;
             }
-
-            const data = await response.json() as JiraApiResponse;
-            this.issues = data.issues.map((issue: JiraApiIssue) => ({
-                key: issue.key,
-                summary: issue.fields.summary,
-                status: issue.fields.status.name,
-                assignee: issue.fields.assignee?.displayName,
-                issueType: issue.fields.issuetype.name
-            }));
 
         } catch (error) {
             vscode.window.showErrorMessage(`Failed to load Jira issues: ${error instanceof Error ? error.message : String(error)}`);
             this.issues = [];
+        } finally {
+            this.isLoading = false;
         }
     }
 
