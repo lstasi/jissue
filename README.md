@@ -76,10 +76,7 @@ npm run lint
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Update CHANGELOG.md with your changes
-5. Submit a pull request
-
-All pull requests must update the CHANGELOG.md file with the changes made.
+4. Submit a pull request
 
 ## Changelog
 
