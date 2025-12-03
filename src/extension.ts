@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { JiraAuthManager } from './auth';
+import { JiraIssueTreeDataProvider } from './issueTree';
 
 /**
  * This method is called when the extension is activated.
@@ -10,6 +11,12 @@ export function activate(context: vscode.ExtensionContext): void {
 
     // Initialize auth manager
     const authManager = new JiraAuthManager(context);
+
+    // Initialize tree view
+    const issueTreeDataProvider = new JiraIssueTreeDataProvider(authManager);
+    const treeView = vscode.window.createTreeView('jissueIssues', {
+        treeDataProvider: issueTreeDataProvider
+    });
 
     // Register the hello world command
     const helloCommand = vscode.commands.registerCommand('jissue.helloWorld', () => {
@@ -40,11 +47,18 @@ export function activate(context: vscode.ExtensionContext): void {
         }
     });
 
+    // Register command to refresh issues
+    const refreshIssuesCommand = vscode.commands.registerCommand('jissue.refreshIssues', async () => {
+        await issueTreeDataProvider.reloadIssues();
+    });
+
     context.subscriptions.push(
+        treeView,
         helloCommand,
         setTokenCommand,
         clearTokenCommand,
-        validateConnectionCommand
+        validateConnectionCommand,
+        refreshIssuesCommand
     );
 }
 
