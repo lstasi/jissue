@@ -83,6 +83,7 @@ export class JiraAuthManager {
 
     /**
      * Validate Jira connection with provided credentials
+     * Note: Uses native fetch API available in Node.js 18+ and modern browsers
      */
     async validateConnection(): Promise<{ success: boolean; message: string }> {
         const config = this.getJiraConfig();

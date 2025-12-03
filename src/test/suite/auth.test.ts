@@ -86,8 +86,12 @@ suite('JiraAuthManager Test Suite', () => {
 
     test('Should return undefined for Jira config when not configured', () => {
         const config = authManager.getJiraConfig();
-        // Config might exist from user settings, so we just test the method works
-        assert.ok(config !== null);
+        // Config might exist from user settings, so we test that the method returns a value or undefined
+        // The method should return undefined if jiraUrl or jiraUsername are not configured
+        if (config) {
+            assert.ok(config.jiraUrl);
+            assert.ok(config.username);
+        }
     });
 
     test('Should create auth headers when token and config exist', async () => {
