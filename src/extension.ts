@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { JiraAuthManager } from './auth';
-import { JiraIssueTreeDataProvider } from './issueTree';
+import { JiraIssueTreeDataProvider, QuickFilter } from './issueTree';
 
 /**
  * This method is called when the extension is activated.
@@ -52,13 +52,65 @@ export function activate(context: vscode.ExtensionContext): void {
         await issueTreeDataProvider.reloadIssues();
     });
 
+    // Register command to set custom JQL query
+    const setCustomJQLCommand = vscode.commands.registerCommand('jissue.setCustomJQL', async () => {
+        const jql = await vscode.window.showInputBox({
+            prompt: 'Enter custom JQL query',
+            placeHolder: 'e.g., project = MYPROJECT AND status = "In Progress"',
+            ignoreFocusOut: true,
+            validateInput: (value: string) => {
+                if (!value || value.trim().length === 0) {
+                    return 'JQL query cannot be empty';
+                }
+                return null;
+            }
+        });
+
+        if (jql) {
+            await issueTreeDataProvider.setCustomJQL(jql);
+            vscode.window.showInformationMessage('Custom JQL query applied');
+        }
+    });
+
+    // Register command to filter by "My Issues"
+    const filterMyIssuesCommand = vscode.commands.registerCommand('jissue.filterMyIssues', async () => {
+        await issueTreeDataProvider.setFilter(QuickFilter.MyIssues);
+        vscode.window.showInformationMessage('Showing your open issues');
+    });
+
+    // Register command to filter by "Recent Issues"
+    const filterRecentIssuesCommand = vscode.commands.registerCommand('jissue.filterRecentIssues', async () => {
+        await issueTreeDataProvider.setFilter(QuickFilter.RecentIssues);
+        vscode.window.showInformationMessage('Showing recent issues');
+    });
+
+    // Register command to filter by "All Open Issues"
+    const filterAllOpenIssuesCommand = vscode.commands.registerCommand('jissue.filterAllOpenIssues', async () => {
+        await issueTreeDataProvider.setFilter(QuickFilter.AllOpenIssues);
+        vscode.window.showInformationMessage('Showing all open issues');
+    });
+
+    // Register command to load more issues
+    const loadMoreIssuesCommand = vscode.commands.registerCommand('jissue.loadMoreIssues', async () => {
+        if (issueTreeDataProvider.hasMore()) {
+            await issueTreeDataProvider.loadMore();
+        } else {
+            vscode.window.showInformationMessage('All issues loaded');
+        }
+    });
+
     context.subscriptions.push(
         treeView,
         helloCommand,
         setTokenCommand,
         clearTokenCommand,
         validateConnectionCommand,
-        refreshIssuesCommand
+        refreshIssuesCommand,
+        setCustomJQLCommand,
+        filterMyIssuesCommand,
+        filterRecentIssuesCommand,
+        filterAllOpenIssuesCommand,
+        loadMoreIssuesCommand
     );
 }
 

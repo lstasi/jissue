@@ -43,6 +43,31 @@
         "title": "Refresh Issues",
         "category": "Jissue",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "jissue.setCustomJQL",
+        "title": "Set Custom JQL Query",
+        "category": "Jissue"
+      },
+      {
+        "command": "jissue.filterMyIssues",
+        "title": "Show My Issues",
+        "category": "Jissue"
+      },
+      {
+        "command": "jissue.filterRecentIssues",
+        "title": "Show Recent Issues",
+        "category": "Jissue"
+      },
+      {
+        "command": "jissue.filterAllOpenIssues",
+        "title": "Show All Open Issues",
+        "category": "Jissue"
+      },
+      {
+        "command": "jissue.loadMoreIssues",
+        "title": "Load More Issues",
+        "category": "Jissue"
       }
     ],
     "views": {
@@ -74,6 +99,18 @@
           "type": "string",
           "default": "",
           "description": "Your Jira username or email"
+        },
+        "jissue.defaultJQL": {
+          "type": "string",
+          "default": "assignee = currentUser() AND status != Done ORDER BY updated DESC",
+          "description": "Default JQL query for listing issues"
+        },
+        "jissue.maxResults": {
+          "type": "number",
+          "default": 50,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Maximum number of issues to fetch per request (1-100)"
         }
       }
     }

@@ -33,6 +33,19 @@ interface JiraApiIssue {
 
 interface JiraApiResponse {
     issues: JiraApiIssue[];
+    startAt: number;
+    maxResults: number;
+    total: number;
+}
+
+/**
+ * Quick filter options for issue listing
+ */
+export enum QuickFilter {
+    MyIssues = 'myIssues',
+    RecentIssues = 'recentIssues',
+    AllOpenIssues = 'allOpenIssues',
+    CustomJQL = 'customJQL'
 }
 
 /**
@@ -76,6 +89,10 @@ export class JiraIssueTreeDataProvider implements vscode.TreeDataProvider<JiraIs
 
     private issues: JiraIssue[] = [];
     private isLoading = false;
+    private currentFilter: QuickFilter = QuickFilter.MyIssues;
+    private customJQL: string = '';
+    private startAt: number = 0;
+    private totalResults: number = 0;
 
     constructor(private authManager: JiraAuthManager) {}
 
@@ -113,9 +130,43 @@ export class JiraIssueTreeDataProvider implements vscode.TreeDataProvider<JiraIs
     }
 
     /**
+     * Get JQL query based on current filter
+     */
+    private getJQLForFilter(): string {
+        switch (this.currentFilter) {
+            case QuickFilter.MyIssues:
+                return 'assignee = currentUser() AND status != Done ORDER BY updated DESC';
+            case QuickFilter.RecentIssues:
+                return 'assignee = currentUser() ORDER BY updated DESC';
+            case QuickFilter.AllOpenIssues:
+                return 'status != Done ORDER BY updated DESC';
+            case QuickFilter.CustomJQL:
+                return this.customJQL || this.getDefaultJQL();
+            default:
+                return this.getDefaultJQL();
+        }
+    }
+
+    /**
+     * Get default JQL from configuration
+     */
+    private getDefaultJQL(): string {
+        const config = vscode.workspace.getConfiguration('jissue');
+        return config.get<string>('defaultJQL') || 'assignee = currentUser() AND status != Done ORDER BY updated DESC';
+    }
+
+    /**
+     * Get max results from configuration
+     */
+    private getMaxResults(): number {
+        const config = vscode.workspace.getConfiguration('jissue');
+        return config.get<number>('maxResults') || 50;
+    }
+
+    /**
      * Load issues from Jira
      */
-    private async loadIssues(): Promise<void> {
+    private async loadIssues(append: boolean = false): Promise<void> {
         if (this.isLoading) {
             return;
         }
@@ -134,9 +185,11 @@ export class JiraIssueTreeDataProvider implements vscode.TreeDataProvider<JiraIs
                 return;
             }
 
-            // Default JQL query: issues assigned to current user that are not done
-            const jql = 'assignee = currentUser() AND status != Done ORDER BY updated DESC';
-            const url = `${config.jiraUrl}/rest/api/3/search/jql?jql=${encodeURIComponent(jql)}&maxResults=50`;
+            const jql = this.getJQLForFilter();
+            const maxResults = this.getMaxResults();
+            const startAt = append ? this.startAt : 0;
+            
+            const url = `${config.jiraUrl}/rest/api/3/search?jql=${encodeURIComponent(jql)}&startAt=${startAt}&maxResults=${maxResults}`;
 
             // Create an AbortController for timeout
             const controller = new AbortController();
@@ -156,13 +209,23 @@ export class JiraIssueTreeDataProvider implements vscode.TreeDataProvider<JiraIs
                 }
 
                 const data = await response.json() as JiraApiResponse;
-                this.issues = data.issues.map((issue: JiraApiIssue) => ({
+                const newIssues = data.issues.map((issue: JiraApiIssue) => ({
                     key: issue.key,
                     summary: issue.fields.summary,
                     status: issue.fields.status.name,
                     assignee: issue.fields.assignee?.displayName,
                     issueType: issue.fields.issuetype.name
                 }));
+
+                if (append) {
+                    this.issues = [...this.issues, ...newIssues];
+                } else {
+                    this.issues = newIssues;
+                }
+
+                this.startAt = data.startAt + data.issues.length;
+                this.totalResults = data.total;
+
             } catch (fetchError) {
                 clearTimeout(timeoutId);
                 if (fetchError instanceof Error && fetchError.name === 'AbortError') {
@@ -173,7 +236,9 @@ export class JiraIssueTreeDataProvider implements vscode.TreeDataProvider<JiraIs
 
         } catch (error) {
             vscode.window.showErrorMessage(`Failed to load Jira issues: ${error instanceof Error ? error.message : String(error)}`);
-            this.issues = [];
+            if (!append) {
+                this.issues = [];
+            }
         } finally {
             this.isLoading = false;
         }
@@ -184,7 +249,45 @@ export class JiraIssueTreeDataProvider implements vscode.TreeDataProvider<JiraIs
      */
     async reloadIssues(): Promise<void> {
         this.issues = [];
+        this.startAt = 0;
         await this.loadIssues();
         this.refresh();
+    }
+
+    /**
+     * Set a quick filter and reload issues
+     */
+    async setFilter(filter: QuickFilter): Promise<void> {
+        this.currentFilter = filter;
+        await this.reloadIssues();
+    }
+
+    /**
+     * Set custom JQL query and reload issues
+     */
+    async setCustomJQL(jql: string): Promise<void> {
+        this.customJQL = jql;
+        this.currentFilter = QuickFilter.CustomJQL;
+        await this.reloadIssues();
+    }
+
+    /**
+     * Load more issues (pagination)
+     */
+    async loadMore(): Promise<void> {
+        if (this.startAt < this.totalResults) {
+            await this.loadIssues(true);
+            this.refresh();
+            vscode.window.showInformationMessage(`Loaded ${this.issues.length} of ${this.totalResults} issues`);
+        } else {
+            vscode.window.showInformationMessage('All issues loaded');
+        }
+    }
+
+    /**
+     * Check if more issues can be loaded
+     */
+    hasMore(): boolean {
+        return this.startAt < this.totalResults;
     }
 }
