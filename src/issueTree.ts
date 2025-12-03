@@ -136,7 +136,7 @@ export class JiraIssueTreeDataProvider implements vscode.TreeDataProvider<JiraIs
 
             // Default JQL query: issues assigned to current user that are not done
             const jql = 'assignee = currentUser() AND status != Done ORDER BY updated DESC';
-            const url = `${config.jiraUrl}/rest/api/3/search?jql=${encodeURIComponent(jql)}&maxResults=50`;
+            const url = `${config.jiraUrl}/rest/api/3/search/jql?jql=${encodeURIComponent(jql)}&maxResults=50`;
 
             // Create an AbortController for timeout
             const controller = new AbortController();
