@@ -9,10 +9,10 @@
 
 ## Phase 2: Authentication
 
-- [ ] Implement secure token storage using VS Code SecretStorage API
-- [ ] Create settings/configuration UI for Jira credentials
-- [ ] Add Jira connection validation
-- [ ] Handle authentication errors gracefully
+- [x] Implement secure token storage using VS Code SecretStorage API
+- [x] Create settings/configuration UI for Jira credentials
+- [x] Add Jira connection validation
+- [x] Handle authentication errors gracefully
 
 ## Phase 3: Issue Listing
 
