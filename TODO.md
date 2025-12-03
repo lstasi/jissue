@@ -16,7 +16,7 @@
 
 ## Phase 3: Issue Listing
 
-- [ ] Create TreeView for displaying Jira issues
+- [x] Create TreeView for displaying Jira issues
 - [ ] Implement JQL query execution
 - [ ] Add custom query support
 - [ ] Implement pagination for large result sets

@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Phase 3: Issue Listing - TreeView implementation
+- JiraIssueTreeDataProvider for displaying Jira issues in VS Code
+- TreeView in Explorer sidebar for browsing Jira issues
+- Refresh command to reload issues from Jira
+- Support for displaying issue key, summary, status, and type
+- Icon indicators based on issue type (Bug, Story, Task, Epic)
+- Default JQL query to show user's assigned issues that are not done
+- Unit tests for TreeView functionality
 - Phase 2: Authentication implementation
 - Secure token storage using VS Code SecretStorage API
 - JiraAuthManager class for managing authentication
