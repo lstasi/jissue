@@ -17,10 +17,10 @@
 ## Phase 3: Issue Listing
 
 - [x] Create TreeView for displaying Jira issues
-- [ ] Implement JQL query execution
-- [ ] Add custom query support
-- [ ] Implement pagination for large result sets
-- [ ] Add quick filters (My Issues, Recent, etc.)
+- [x] Implement JQL query execution
+- [x] Add custom query support
+- [x] Implement pagination for large result sets
+- [x] Add quick filters (My Issues, Recent, etc.)
 
 ## Phase 4: Branch Management
 

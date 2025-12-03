@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Phase 3: Issue Listing - Enhanced features
+- JQL query execution with configurable default query via settings
+- Custom JQL query support with input dialog
+- Pagination support for large issue result sets
+- Quick filter commands (My Issues, Recent Issues, All Open Issues)
+- Configuration options: `jissue.defaultJQL` and `jissue.maxResults`
+- "Load More Issues" command for pagination
+- "Set Custom JQL Query" command for ad-hoc queries
+- Quick filter commands for common issue views
+- Extended tests for new filtering and pagination functionality
+- Documentation for usage, configuration, and available commands
 - Phase 3: Issue Listing - TreeView implementation
 - JiraIssueTreeDataProvider for displaying Jira issues in VS Code
 - TreeView in Explorer sidebar for browsing Jira issues

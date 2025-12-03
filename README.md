@@ -36,9 +36,18 @@ Configure the extension in your VS Code settings:
 ```json
 {
   "jissue.jiraUrl": "https://your-domain.atlassian.net",
-  "jissue.jiraUsername": "your-email@example.com"
+  "jissue.jiraUsername": "your-email@example.com",
+  "jissue.defaultJQL": "assignee = currentUser() AND status != Done ORDER BY updated DESC",
+  "jissue.maxResults": 50
 }
 ```
+
+### Configuration Options
+
+- **jissue.jiraUrl**: Your Jira instance URL (e.g., `https://your-domain.atlassian.net`)
+- **jissue.jiraUsername**: Your Jira username or email address
+- **jissue.defaultJQL**: Default JQL query for listing issues (default: `assignee = currentUser() AND status != Done ORDER BY updated DESC`)
+- **jissue.maxResults**: Maximum number of issues to fetch per request (1-100, default: 50)
 
 ### Getting a Jira API Token
 
@@ -49,7 +58,46 @@ Configure the extension in your VS Code settings:
 
 ## Usage
 
-> **Note**: Usage instructions will be added as features are implemented.
+### Viewing Issues
+
+1. Open the "Jira Issues" view in the Explorer sidebar
+2. Issues will automatically load based on your default JQL query
+3. Click the refresh icon to reload issues
+
+### Quick Filters
+
+Access quick filters via the Command Palette (Ctrl/Cmd+Shift+P):
+
+- **Jissue: Show My Issues** - Shows your assigned issues that are not done
+- **Jissue: Show Recent Issues** - Shows all your recently updated issues
+- **Jissue: Show All Open Issues** - Shows all open issues in your Jira instance
+
+### Custom JQL Queries
+
+1. Open Command Palette (Ctrl/Cmd+Shift+P)
+2. Run **Jissue: Set Custom JQL Query**
+3. Enter your custom JQL query (e.g., `project = MYPROJECT AND status = "In Progress"`)
+4. Issues will reload with your custom query
+
+### Pagination
+
+When you have more issues than the configured `maxResults`:
+
+1. Open Command Palette (Ctrl/Cmd+Shift+P)
+2. Run **Jissue: Load More Issues**
+3. Additional issues will be appended to the list
+
+### Commands
+
+- **Jissue: Set Jira API Token** - Store your Jira API token securely
+- **Jissue: Clear Jira API Token** - Remove stored token
+- **Jissue: Validate Jira Connection** - Test connection to Jira
+- **Jissue: Refresh Issues** - Reload issue list
+- **Jissue: Set Custom JQL Query** - Apply a custom JQL query
+- **Jissue: Show My Issues** - Filter to show your open issues
+- **Jissue: Show Recent Issues** - Filter to show recent issues
+- **Jissue: Show All Open Issues** - Filter to show all open issues
+- **Jissue: Load More Issues** - Load additional issues (pagination)
 
 ## Development
 

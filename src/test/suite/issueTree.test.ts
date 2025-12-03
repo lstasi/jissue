@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
-import { JiraIssueTreeDataProvider, JiraIssue, JiraIssueTreeItem } from '../../issueTree';
+import { JiraIssueTreeDataProvider, JiraIssue, JiraIssueTreeItem, QuickFilter } from '../../issueTree';
 import { JiraAuthManager } from '../../auth';
 
 suite('JiraIssueTreeDataProvider Test Suite', () => {
@@ -123,5 +123,36 @@ suite('JiraIssueTreeDataProvider Test Suite', () => {
         assert.ok(typeof treeDataProvider.reloadIssues === 'function');
         // Should not throw when called (even without proper config)
         await treeDataProvider.reloadIssues();
+    });
+
+    test('TreeDataProvider should have setFilter method', async () => {
+        assert.ok(typeof treeDataProvider.setFilter === 'function');
+        // Should not throw when called (even without proper config)
+        await treeDataProvider.setFilter(QuickFilter.MyIssues);
+    });
+
+    test('TreeDataProvider should have setCustomJQL method', async () => {
+        assert.ok(typeof treeDataProvider.setCustomJQL === 'function');
+        // Should not throw when called (even without proper config)
+        await treeDataProvider.setCustomJQL('project = TEST');
+    });
+
+    test('TreeDataProvider should have loadMore method', async () => {
+        assert.ok(typeof treeDataProvider.loadMore === 'function');
+        // Should not throw when called (even without proper config)
+        await treeDataProvider.loadMore();
+    });
+
+    test('TreeDataProvider should have hasMore method', () => {
+        assert.ok(typeof treeDataProvider.hasMore === 'function');
+        // Should return false when no issues loaded
+        assert.strictEqual(treeDataProvider.hasMore(), false);
+    });
+
+    test('QuickFilter enum should have expected values', () => {
+        assert.strictEqual(QuickFilter.MyIssues, 'myIssues');
+        assert.strictEqual(QuickFilter.RecentIssues, 'recentIssues');
+        assert.strictEqual(QuickFilter.AllOpenIssues, 'allOpenIssues');
+        assert.strictEqual(QuickFilter.CustomJQL, 'customJQL');
     });
 });
