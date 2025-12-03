@@ -21,6 +21,8 @@
 - [x] Add custom query support
 - [x] Implement pagination for large result sets
 - [x] Add quick filters (My Issues, Recent, etc.)
+- [x] Move Jira issues from Explorer to custom sidebar view
+- [x] Add Jira icon to sidebar view container
 
 ## Phase 4: Branch Management
 

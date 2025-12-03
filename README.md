@@ -60,7 +60,7 @@ Configure the extension in your VS Code settings:
 
 ### Viewing Issues
 
-1. Open the "Jira Issues" view in the Explorer sidebar
+1. Open the "Jira Issues" view in the Activity Bar (sidebar)
 2. Issues will automatically load based on your default JQL query
 3. Click the refresh icon to reload issues
 

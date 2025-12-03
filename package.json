@@ -70,11 +70,20 @@
         "category": "Jissue"
       }
     ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "jissue",
+          "title": "Jira Issues",
+          "icon": "$(server)"
+        }
+      ]
+    },
     "views": {
-      "explorer": [
+      "jissue": [
         {
           "id": "jissueIssues",
-          "name": "Jira Issues"
+          "name": "Issues"
         }
       ]
     },
