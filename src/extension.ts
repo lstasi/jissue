@@ -92,11 +92,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
     // Register command to load more issues
     const loadMoreIssuesCommand = vscode.commands.registerCommand('jissue.loadMoreIssues', async () => {
-        if (issueTreeDataProvider.hasMore()) {
-            await issueTreeDataProvider.loadMore();
-        } else {
-            vscode.window.showInformationMessage('All issues loaded');
-        }
+        await issueTreeDataProvider.loadMore();
     });
 
     context.subscriptions.push(

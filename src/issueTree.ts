@@ -275,7 +275,7 @@ export class JiraIssueTreeDataProvider implements vscode.TreeDataProvider<JiraIs
      * Load more issues (pagination)
      */
     async loadMore(): Promise<void> {
-        if (this.startAt < this.totalResults) {
+        if (this.hasMore()) {
             await this.loadIssues(true);
             this.refresh();
             vscode.window.showInformationMessage(`Loaded ${this.issues.length} of ${this.totalResults} issues`);
