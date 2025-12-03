@@ -37,8 +37,31 @@
         "command": "jissue.validateConnection",
         "title": "Validate Jira Connection",
         "category": "Jissue"
+      },
+      {
+        "command": "jissue.refreshIssues",
+        "title": "Refresh Issues",
+        "category": "Jissue",
+        "icon": "$(refresh)"
       }
     ],
+    "views": {
+      "explorer": [
+        {
+          "id": "jissueIssues",
+          "name": "Jira Issues"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "jissue.refreshIssues",
+          "when": "view == jissueIssues",
+          "group": "navigation"
+        }
+      ]
+    },
     "configuration": {
       "title": "Jissue",
       "properties": {
