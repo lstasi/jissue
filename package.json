@@ -17,7 +17,28 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [],
+    "commands": [
+      {
+        "command": "jissue.helloWorld",
+        "title": "Hello World",
+        "category": "Jissue"
+      },
+      {
+        "command": "jissue.setToken",
+        "title": "Set Jira API Token",
+        "category": "Jissue"
+      },
+      {
+        "command": "jissue.clearToken",
+        "title": "Clear Jira API Token",
+        "category": "Jissue"
+      },
+      {
+        "command": "jissue.validateConnection",
+        "title": "Validate Jira Connection",
+        "category": "Jissue"
+      }
+    ],
     "configuration": {
       "title": "Jissue",
       "properties": {
