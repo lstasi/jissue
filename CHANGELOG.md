@@ -8,12 +8,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Phase 2: Authentication implementation
+- Secure token storage using VS Code SecretStorage API
+- JiraAuthManager class for managing authentication
+- Commands for setting and clearing Jira API tokens
+- Command for validating Jira connection
+- Configuration UI for Jira credentials (jiraUrl and jiraUsername)
+- Error handling for authentication failures
+- Unit tests for authentication functionality
 - Initial project setup
 - README with project overview and features
 - TODO roadmap for development phases
 - CHANGELOG for version tracking
 - GitHub Actions CI/CD workflow
 - Dependabot configuration for dependency updates
+- TypeScript configuration (`tsconfig.json`)
+- ESLint configuration (`.eslintrc.json`)
+- VS Code extension project structure with `src/` directory
+- Main extension entry point (`src/extension.ts`)
+- Test infrastructure with Mocha (`src/test/`)
+- Hello World command for testing extension activation
 
 ## [0.1.0] - 2024-01-01
 
